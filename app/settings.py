@@ -1,9 +1,12 @@
+import os
 from unipath import Path
 from decouple import config
 import dj_database_url
-import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+BASE_DIR=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 DEBUG=False
 
@@ -53,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -113,19 +117,18 @@ USE_TZ = True
 TIME_ZONE='America/Argentina/Buenos_Aires'
 
 
-
 STATIC_ROOT=os.path.join(BASE_DIR ,'staticfiles')
 STATIC_URL = '/static/'
-
-STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+#estas configuraciones se hicieron para el deploy en heroku
+STATIICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = (os.path.join(BASE_DIR ,'static'),)
 
 
-
-
+#STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+
 
 
 db_from_env=dj_database_url.config(conn_max_age=500)
