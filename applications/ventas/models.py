@@ -4,11 +4,12 @@ from django.dispatch import receiver
 from django.db.models import Sum
 # Create your models here.
 from applications.bases.models import ClaseModelo
-
+from applications.caja.models import Caja
 from django.db.models.signals import post_save ,post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
 from applications.vino.models import Vino
+from applications.ventas.managers import FacturaDetManager,FacturaEncManager
 
 NAT='natural'
 JUR='juridica'
@@ -34,6 +35,8 @@ class FacturaEnc(ClaseModelo):
     sub_total=models.FloatField(default=0)
     descuento=models.FloatField(default=0)
     total=models.FloatField(default=0)
+    cerrada=models.BooleanField(default=False)
+    objects=FacturaEncManager()
 
     def __str__(self):
         return '{}'.format(self.id)
@@ -49,6 +52,8 @@ class FacturaEnc(ClaseModelo):
       #      ('sup_caja_facturaenc','Permisos de Supervisor de Caja Encabezado')
        # ]
     
+#venta anulada= es aquella venta que se cancela
+#venta cerrada=es aquella venta que se cierra en un cierre de caja 
 
 class FacturaDet(ClaseModelo):
     factura = models.ForeignKey(FacturaEnc,on_delete=models.CASCADE)
@@ -58,6 +63,8 @@ class FacturaDet(ClaseModelo):
     sub_total=models.FloatField(default=0)
     descuento=models.FloatField(default=0)
     total=models.FloatField(default=0)
+    anulada=models.BooleanField(default=False)
+    objects=FacturaDetManager()
 
     def __str__(self):
         return '{}'.format(self.vino)
@@ -82,17 +89,17 @@ def detalle_fac_guardar(sender,instance,**kwargs):
 
     enc = FacturaEnc.objects.get(pk=factura_id)
     if enc:
-        sub_total = FacturaDet.objects \
-            .filter(factura=factura_id) \
-            .aggregate(sub_total=Sum('sub_total')) \
-            .get('sub_total',0.00)
-        
+        sub_total = FacturaDet.objects.filter(factura=factura_id).aggregate(sub_total=Sum('sub_total')).get('sub_total',0.00)
+
+        print(FacturaDet.objects.filter(factura=factura_id))
+
         descuento = FacturaDet.objects \
             .filter(factura=factura_id) \
             .aggregate(descuento=Sum('descuento')) \
             .get('descuento',0.00)
         
         enc.sub_total = sub_total
+        #print('///////////////////',enc.sub_total)
         enc.descuento = descuento
         enc.save()
 
@@ -105,3 +112,17 @@ def detalle_fac_guardar(sender,instance,**kwargs):
             vino.save()
         else:
             print('no hay stock')
+
+@receiver(post_save, sender=FacturaDet)
+
+def ventas_caja(sender ,instance , **kwargs):
+    ultima_venta=FacturaDet.objects.last()
+    ultimo_total=ultima_venta.total
+    caja=Caja.objects.last()
+    monto_actual_caja=caja.monto_actual
+    print('caja ahora' , monto_actual_caja)
+    caja.monto_actual=monto_actual_caja+ultimo_total
+    caja.save()
+    print('caja luego de sumar',ultimo_total,':',caja.monto_actual)
+
+
