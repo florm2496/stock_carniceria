@@ -25,6 +25,8 @@ urlpatterns = [
     path('compras/',include(('applications.compras.urls' ,'compras'),namespace='compras')),
     path('ventas/',include(('applications.ventas.urls' ,'ventas'),namespace='ventas')),
     path('apis/',include(('applications.apis.urls' ,'apis'),namespace='apis')),
+    path('reses/',include(('applications.reses.urls' ,'reses'),namespace='reses')),
+    path('caja/',include(('applications.caja.urls' ,'caja'),namespace='caja')),
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'applications.ventas',
     'rest_framework',
     'applications.apis',
-    'django_userforeignkey',
+    'applications.reses',
+    'applications.caja',
+    'django_userforeignkey'
+   
     
 ]
 
