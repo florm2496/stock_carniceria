@@ -16,12 +16,25 @@ class MovimientosCajaCreateView(CreateView):
     form_class=MovimientoNewForm
     success_url=reverse_lazy('caja:listaoperaciones')
         
-
+    
+    
+    
 
 class ListaOperacionesListView(ListView):
     model=MovimientosCaja
     template_name='caja/listaoperaciones.html'
     context_object_name='obj'
+    
+    def get_context_data(self, **kwargs):
+        caja=Caja.objects.first()
+        monto_actual=caja.monto_actual
+
+        movimientos=MovimientosCaja.objects.all()
+
+        print(monto_actual)
+        context = {'montoactual':monto_actual,
+                   'movimientos':movimientos, }
+        return context
 
     #monto inicial a la hora de apertura
     #cuanto en egresos

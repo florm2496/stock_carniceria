@@ -39,10 +39,12 @@ class Vino(ClaseModelo2):
     ultimacompra=models.DateField(blank=True , null=True)
     sm=models.IntegerField(blank=True , null=True)
     
+    class Meta:
+        verbose_name='Productos'
+        
 
     def __str__(self):
             return '{}'.format(self.nombre)
-class Meta:
-        verbose_name_plural = "Productos"
+
 
   
