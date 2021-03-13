@@ -176,8 +176,16 @@ class VinoView(VinoView):
 
 def borrar_detalle_factura(request, id):
     template_name = "ventas/borrar_detalle.html"
-
     det = FacturaDet.objects.get(pk=id)
+    
+  
+    #obteniendo la factura que se relaciona con este detalle
+    id_enc=det.factura.id
+    #obteniendo una instancia de esa factura
+    enc=FacturaEnc.objects.get(pk=id_enc)
+    
+    #obteniendo el cliente de esa factura
+    cliente=enc.cliente
 
     if request.method=="GET":
         context={"det":det}
@@ -201,9 +209,37 @@ def borrar_detalle_factura(request, id):
             det.descuento = (-1 * det.descuento)
             det.total = (-1 * det.total)
             det.save()
+            
+            cantidad_descontada=det.sub_total
+            saldo=cliente.saldo
 
+            if saldo!=float(0):
+                
+                cliente.saldo=saldo+cantidad_descontada
+                cliente.save()
+                print('------------------------se hizo el descuento')
+            elif saldo==float(0):
+
+                print('el saldo ya es 0',cliente.saldo)
+            
+
+            
             return HttpResponse("ok")
 
         return HttpResponse("Usuario no autorizado")
     
     return render(request,template_name,context)
+
+'''
+
+            #se obtiene el cliente que relacionado a la venta(o el que realizo la compra)
+            cliente_id=enc.cliente.id
+            #se obtiene la instancia de ese cliente
+            cliente=Cliente.objects.get(pk=cliente_id)
+            #se obtiene el saldo que tenia el cliente antes de realizar la compra
+            saldo=cliente.saldo
+            print('desde el borrado',enc.sub_total)
+            #se actualiza su saldo con el monto de la compra que realizo
+            cliente.saldo=saldo + enc.sub_total
+            #se guarda la actualizacion en la base de datos
+            cliente.save()'''

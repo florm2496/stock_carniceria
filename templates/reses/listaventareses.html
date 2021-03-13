@@ -36,14 +36,14 @@
                  >
                     <thead>
    <th data-sortable="true" data-field="id" >id</th>
-    <th data-sortable="true" data-field="nombre" >nombre</th>
-    <th data-sortable="true" data-field="tipo" >tipo</th>
+    <th data-sortable="true" data-field="res" >res</th>
+    <th data-sortable="true" data-field="cliente" >cliente</th>
    
 
-     <th data="numero" >numero</i></th>
-     <th  data="email"  >email</th>
-     <th  data-field="saldo" >saldo</th>
-     <th data="estado"  >estado</th>
+     <th data="precio" >precio</i></th>
+     <th  data="medio_pago"  >medio de pago</th>
+     <th   >estado</th>
+  
     <th class="all">Editar</th>
                     </thead>
 <tbody>
@@ -52,17 +52,13 @@
     <tr>
       <td>{{item.id}}</td>
 
-        <td>{{item.nombre}}</td>
+        <td>{{item.res}}</td>
 
-        <td>{{item.tipo}}</td>
-        <td>{{item.numero}}</td>
-        
-        <td>{{item.email}}</td>
-         <td>{{item.saldo}}</td>
-
-        
-      
-        <td >{{item.estado|yesno:"Activo,Inactivo"}}
+        <td>{{item.cliente}}</td>
+        <td>{{item.precio}}</td>
+        <td>{{item.medio_pago}}</td>
+        <td>{{item.estado}}</td>
+       
         </td> 
     <td>
       <button type="submit" class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'ventas:cliente_edit' item.id %}')"><i class="far fa-edit"></i></button>

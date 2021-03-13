@@ -11,6 +11,9 @@ from django.db.models import Sum
 from applications.vino.models import Vino
 from applications.ventas.managers import FacturaDetManager,FacturaEncManager
 
+
+
+
 NAT='natural'
 JUR='juridica'
 TIPO_CLIENTE=[
@@ -21,6 +24,7 @@ TIPO_CLIENTE=[
 class Cliente(ClaseModelo):
     nombre = models.CharField(max_length=50, default='casual')
     tipo = models.CharField(max_length=15, choices=TIPO_CLIENTE,default=NAT )
+    saldo=models.FloatField(default=0)
     numero = models.CharField(blank=True,null=True, max_length=50)
     email = models.CharField(blank=True,null=True, max_length=50)
     direccion = models.CharField(blank=True,null=True, max_length=50)
@@ -29,6 +33,18 @@ class Cliente(ClaseModelo):
         return self.nombre
     class Meta:
         verbose_name_plural='Clientes'
+
+
+class Pago(ClaseModelo):
+    monto=models.FloatField(default=0)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id + self.cliente
+
+    class Meta:
+        verbose_name_plural='Pagos'
+
 class FacturaEnc(ClaseModelo):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
@@ -81,13 +97,20 @@ class FacturaDet(ClaseModelo):
      #       ('sup_caja_facturadet','Permisos de Supervisor de Caja Detalle')
       #  ]
 
+        
 
+      
 @receiver(post_save, sender=FacturaDet)
 def detalle_fac_guardar(sender,instance,**kwargs):
     factura_id = instance.factura.id
     vino_id = instance.vino.id
 
     enc = FacturaEnc.objects.get(pk=factura_id)
+    
+    detalle=FacturaDet.objects.get(pk=instance.id)
+    subtotal=detalle.sub_total
+    #print('detalle del subtotal',detalle.sub_total)
+
     if enc:
         sub_total = FacturaDet.objects.filter(factura=factura_id).aggregate(sub_total=Sum('sub_total')).get('sub_total',0.00)
 
@@ -98,10 +121,23 @@ def detalle_fac_guardar(sender,instance,**kwargs):
             .aggregate(descuento=Sum('descuento')) \
             .get('descuento',0.00)
         
+
         enc.sub_total = sub_total
         #print('///////////////////',enc.sub_total)
         enc.descuento = descuento
+
         enc.save()
+
+        cliente=enc.cliente
+        saldo=cliente.saldo
+        if subtotal>=0:
+            cliente.saldo=saldo + subtotal
+            cliente.save()
+            print('saldo del cliente positivo')
+        elif subtotal<0:
+            print('saldo cliente ngativo',cliente.saldo)
+        
+        
 
     vino=Vino.objects.filter(pk=vino_id).first()
     
@@ -110,8 +146,12 @@ def detalle_fac_guardar(sender,instance,**kwargs):
             cantidad = int(vino.existencia) - int(instance.cantidad)
             vino.existencia = cantidad
             vino.save()
+            print('vinoooooooooooooooooooooo')
         else:
             print('no hay stock')
+
+
+
 
 @receiver(post_save, sender=FacturaDet)
 
@@ -120,9 +160,35 @@ def ventas_caja(sender ,instance , **kwargs):
     ultimo_total=ultima_venta.total
     caja=Caja.objects.last()
     monto_actual_caja=caja.monto_actual
-    print('caja ahora' , monto_actual_caja)
+    #print('caja ahora' , monto_actual_caja)
     caja.monto_actual=monto_actual_caja+ultimo_total
     caja.save()
-    print('caja luego de sumar',ultimo_total,':',caja.monto_actual)
+    #print('caja luego de sumar',ultimo_total,':',caja.monto_actual)
 
 
+'''
+@receiver(post_save, sender=Pago)
+def realizar_pago(sender,instance,**kwargs):
+    
+    
+    
+      #se obtiene el cliente que relacionado a la venta(o el que realizo la compra)
+        cliente_id=enc.cliente.id
+        #se obtiene la instancia de ese cliente
+        cliente=Cliente.objects.get(pk=cliente_id)
+        #se obtiene el saldo que tenia el cliente antes de realizar la compra
+        saldo=cliente.saldo
+        print('desde el borrado',enc.sub_total)
+        #se actualiza su saldo con el monto de la compra que realizo
+        cliente.saldo=saldo + enc.sub_total
+        #se guarda la actualizacion en la base de datos
+        cliente.save()
+
+    
+    
+    
+    
+    
+    
+    
+    '''

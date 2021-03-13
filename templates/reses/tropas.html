@@ -7,14 +7,14 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">REGISTRO DE RESES</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Tropas registradas</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">ACCIONES:</div>
-                      <a class="dropdown-item" href="">Nueva</a>
+                      <a class="dropdown-item" href="{% url 'reses:añadirtropa' %}">Nueva tropa</a>
                     
                     </div>
                   </div>
@@ -23,7 +23,7 @@
                 <div class="card-body">
                  
                  {% if not obj %}
-                     No hay registro de reses
+                     No hay tropas
                  {% endif %}
                  <table class="table table-striped table-hover"
                  
@@ -41,44 +41,33 @@
                  
                  >
                     <thead>
-                        <th data-sortable="true" data-field="nombre">Nombre</th>
-                        <th data-sortable="true" >Animal</th>
-                        <th data-sortable="true" >Tropa</th>
-                      <th>Peso inicial</th>
-                      <th>Peso final</th>
-     <th  >Fecha de ingreso| usuario</th>
-     <th>Ultma modificacion | usuario</th>
-     <th  data-field="estado">Estado</th>
-     <th  class="all">Editar</th>
+                    
+     <th data-field="numero" >Numero de tropa</i></th>
+     <th >Cantidad de animales</th>
+     <th  >Usuario creador</th>
+     <th>Ultma modificacion</th>
+    <th  class="all">Editar</th>
+    <th>Añadir animal</th>
+    <th>Lista animales</th>
                     </thead>
 <tbody>
     
     {% for item in obj  %}
     <tr>
-        <td>{{item}}</td>
-        <td>{{item.animal.numero}}</td>
-        <td>{{item.animal.tropa}}</td>
-        <td>{{item.peso_inicial}}</td>
-        <td>{{item.peso_final}}</td>
-   
-        <td>{{item.ingreso}} | {{item.uc}}</td>
-        <td> {{item.fm}} |
+        <td>{{item.id}}</td>
+        <td>{{item.cant_animales}}</td>
+        <td>{{item.uc}}</td>
+        <td> {{item.fm}}
           {{item.um}}
         </td>
+        
         <td>
-          
-          {% if  item.estado %}
-          Activo
-            {% else  %}
-           Eliminada
-          {% endif %}
-            
-         
-        </td>
-        <td>
-            <a href="{% url 'reses:updatereses' item.id %}" class="btn btn-warning btn-circle " role="button" ><i class="far fa-edit"></i></a>
+            <a href="{% url 'reses:editartropa' item.pk %}" class="btn btn-warning btn-circle " role="button" ><i class="far fa-edit"></i></a>
            
         </td>
+        <td><a href="{% url 'reses:animal' item.pk %}" class="btn btn-success btn-circle " role="button" ><i class="fas fa-plus"></i></a></td>
+       
+        <td><a href="{% url 'reses:animales' item.pk %}" class="btn btn-info btn-circle " role="button" ><i class="fas fa-list"></i></a></td>
     </tr>
         
     {% endfor %}

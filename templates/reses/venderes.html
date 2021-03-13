@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+
+{% block page_content %}
+
+<form method="POST" class="form-inline">
+    {% csrf_token %}
+    <div class="col-xl-6 col-md-6 mb-6">
+        {% if obj %}
+        <div class="card border-left-warning shadow h-100 py-2">
+        {% else %}
+        <div class="card border-left-success shadow h-100 py-2">
+        {% endif %}
+            <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        {% if obj %} Editar {% else %} Nueva {% endif %} Venta de res
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    {% csrf_token %}
+<div class="row">
+    <div class="col-6">
+        <label for="id_res">Media res</label>
+        <select name="res" id="id_res" required class="form-control">
+            
+            {% for item in reses %}
+            <option value="{{item.id}}" >{{item}}</option>
+            {% endfor %}   </select>
+    </div>
+   <div  class="col-6">
+       <label for="id_cliente">Cliente</label>
+    <select id="id_cliente" name="cliente" required class="form-control">
+        {% for item in clientes %}
+        <option value="{{item.id}}">{{item}}</option>
+        {% endfor %}   
+    </select>
+</div>
+   <div class="col-6">   
+    <label for="id_precio">Precio</label>
+    <input type="number" id="id_precio" required name="precio"  class="form-control">
+ 
+</div>
+<div  class="col-6">
+    <label for="id_medio_pago" >Medio de pago</label>
+    {{form.medio_pago}}
+</div>
+
+{% if obj %}
+    
+<div>
+    <label for="id_estado" >Estado</label>
+    {{form.estado}}
+</div>
+
+{% endif %}
+    
+
+    
+   </div>
+
+
+                    <div class="dropdown-divider"></div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
+                            <a href="" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+  {% endblock page_content %}
+

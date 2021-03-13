@@ -8,9 +8,9 @@ import dj_database_url
 BASE_DIR=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-DEBUG=False
+DEBUG=True
 
-ALLOWED_HOSTS=['*']
+ALLOWED_HOSTS=[]
 
 
 SECRET_KEY = config('SECRET_KEY')
@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'carne',
+        'NAME': 'carne2',
         'HOST':'localhost',
         'PORT':'5432',
         'USER': 'florm2496',
