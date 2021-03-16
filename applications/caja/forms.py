@@ -4,8 +4,8 @@ from django import forms
 class MovimientoNewForm(forms.ModelForm):
     class Meta:
         model=MovimientosCaja
-        fields=['movimiento','monto','observacion']
-        labels={'movimiento':'Movimiento','monto': 'Monto' , 'observacion':'Observacion'}
+        fields=['movimiento','monto','observacion','concepto']
+        labels={'movimiento':'Movimiento','monto': 'Monto' , 'observacion':'Observacion' ,'concepto':'Concepto'}
         widget={'observacion':forms.TextInput}
 
 def __init__(self, *args, **kwargs): #SE SOBRESCRIBE EL CONSTRUCTOR DEL FORMULARIO

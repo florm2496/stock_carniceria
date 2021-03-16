@@ -11,6 +11,8 @@ class Tropa(ClaseModelo2):
     def __str__(self):
         return 'Tropa numero'+str(self.id)
 
+    
+
 class Animal(ClaseModelo2):
     numero=models.IntegerField(default=0)
     ident=models.CharField(max_length=50,blank=True, null=True)
@@ -22,15 +24,15 @@ class Animal(ClaseModelo2):
      #   super(Animal , self).save()
 
     def __str__(self):
-        
-        return str(self.numero) +'-'+ str(self.tropa)
+        #aqui deberia retornar el identificador del animal ?
+        return 'Animal'+ str(self.numero) +'-'+ str(self.tropa)
     
 
 
 
 class Res(ClaseModelo2):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
-    nombre=models.CharField(default='Res' ,max_length=10)
+    nombre=models.CharField(default='Res' ,max_length=20)
     peso_inicial = models.FloatField(max_length=7 , default=0)
     ingreso = models.DateTimeField(auto_now_add=True)
     peso_final=models.FloatField(blank=True , null=True , default=0)
@@ -52,10 +54,10 @@ MP='mercado pago'
 EF='efectivo'
 TJ='tarjeta'
 MEDIO_PAGO=[
-    ('TB' ,'TRANSFERENCIA BANCARIA'),
-    ('MP' ,'MERCADO PAGO'),
-    ('EF' ,'EFECTIVO'),
-    ('TJ' ,'TARJETA')
+    (TB ,'TRANSFERENCIA BANCARIA'),
+    (MP ,'MERCADO PAGO'),
+    (EF ,'EFECTIVO'),
+    (TJ ,'TARJETA')
 ]
 class VentaReses(ClaseModelo2):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -65,6 +67,9 @@ class VentaReses(ClaseModelo2):
 
     def __str__(self):
         return str(self.id)+'-'+str(self.precio)
+    
+   
+
     class Meta:
         """Meta definition for MODELNAME."""
 
@@ -74,7 +79,7 @@ class VentaReses(ClaseModelo2):
 
 @receiver(post_save, sender=Animal)
 def CrearResesDeUnAnimal(sender, instance,**kwargs):
-    tropa=instance.tropa
+    tropa=instance.tropa            #ESTO DEBERIA ESTAR EN OTRO PROCESO
     id_animal=instance.id
    
     animal=Animal.objects.filter(id=id_animal).update(
@@ -88,8 +93,8 @@ def CrearResesDeUnAnimal(sender, instance,**kwargs):
     anm=Animal.objects.get(id=id_animal)
     for num in range(2):
         res =Res(
-            animal=anm,
-            nombre='res{}-anm{}'.format(num,anm.id),
+            animal=anm,             #aqui se deberia pasar el numero y no el id del animal
+            nombre='res{}-animal{}'.format(num,anm.numero),
         )
         reses.append(res)
     Res.objects.bulk_create(reses)
@@ -104,3 +109,19 @@ def vender_reses(sender , instance,**kwargs):
     #cambiar estado de la res
     res.vendida=True
     res.save()
+    #aumentar monto de la venta al saldo del cliente
+    id_cliente=instance.cliente.id
+
+    cliente=Cliente.objects.get(pk=id_cliente)
+
+    saldo_cliente=cliente.saldo
+    print('desde el signal')
+    precio_venta=instance.precio
+
+    cliente.saldo=saldo_cliente+precio_venta
+
+    #si se da de baja la venta con el estado=True
+    if instance.estado is True:
+        cliente.saldo=saldo_cliente-precio_venta
+
+    cliente.save()

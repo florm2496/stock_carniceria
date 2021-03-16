@@ -14,7 +14,7 @@ urlpatterns = [
     path('añadirtropa/' ,CreateTropa.as_view() , name='añadirtropa'),
     path('editartropa/<int:pk>' ,UpdateTropa.as_view() , name='editartropa'),
 
-    path('venderes' ,VentaResesCreate.as_view() , name='venderes'),
+    path('venderes/<int:pk>' ,VentaResesCreate.as_view() , name='venderes'),
     path('listaresesvendidas' ,VentaResesList.as_view(), name='listaresesvendidas' ),
     path('vendereseditar/<int:pk>' ,VentaResesUpdate.as_view() , name='vendereseditar'),
 ]

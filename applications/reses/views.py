@@ -112,22 +112,27 @@ class ListarAnimales(ListView):
 class VentaResesCreate(CreateView):
     form_class=VenderRes
     template_name='reses/venderes.html'
-    success_url=reverse_lazy('reses:venderes')
+    success_url=reverse_lazy('reses:listaresesvendidas')
 
     
     def get_context_data(self, **kwargs):
+        #SE PASA EL ID DE LA RES QUE SE QUIERE VENDER
+        ID=self.kwargs['pk']
+
         context = super(VentaResesCreate, self).get_context_data(**kwargs)
-        context['reses']=Res.objects.filter(vendida=False)
+        context['reses']=Res.objects.filter(id=ID)
         context['clientes']=Cliente.objects.filter(estado=True)
         return context
-class VentaResesUpdate(UpdateView):
-    form_class=VenderRes
-    template_name='reses/venderes.html'
-    success_url=reverse_lazy('reses:venderes')
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
+
+class VentaResesUpdate(UpdateView):
+    model=VentaReses
+    form_class=VenderRes
+    context_object_name='obj'
+    template_name='reses/venderes.html'
+    success_url=reverse_lazy('reses:listaresesvendidas')
+
+                 
 
 class VentaResesList(ListView):
     model=VentaReses

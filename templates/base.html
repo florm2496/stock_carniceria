@@ -88,6 +88,7 @@
 {% url 'caja:listaoperaciones' as listaoperaciones_url %}
 {% url 'reses:listareses' as listareses_url %}
 {% url 'reses:tropas' as tropas_url %}
+{% url 'carne:listacortes' as listacortes_url %}
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item 
@@ -97,21 +98,23 @@
           ">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
-          <span>CATALOGOS</span>
+          <span>MENU</span>
         </a>
         <div id="collapseTwo" class="collapse  {% if cepa_url in request.path or bodega_url in request.path or  reser_url in request.path or uni_url in request.path %}
         show
       {% endif %} " aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">CATALOGOS DE INVENTARIO</h6>
+            <h6 class="collapse-header"></h6>
 
-          
-            <a class="collapse-item" href="{{reser_url}}">Categorias</a>
+        <!--   <a class="collapse-item" href="{{reser_url}}">Categorias</a>
+           <a class="collapse-item" href="{{uni_url}}">Unidades</a>
+        -->  
+         
            
-            <a class="collapse-item" href="{{uni_url}}">Unidades</a>
+         
             <a class="collapse-item" href="{{tropas_url}}">Ingreso de tropas</a>
             <a class="collapse-item" href="{{listareses_url}}">Ingreso de reses</a>
-            
+            <a class="collapse-item" href="{{listacortes_url}}">Cortes de carne</a>
             <a class="collapse-item" href="{{vino_url}}">Productos</a>
               
               {% if perms.compras.view_comprasenc %}
@@ -120,11 +123,12 @@
 
               
           
-              {% if perms.ventas.view_clientes %}
-            <a class="collapse-item" href="{{clientes_url}}">Clientes</a>
-            {% endif %}
+            
             {% if perms.ventas.view_facturaenc %}
             <a class="collapse-item" href="{{ventas_url}}">Ventas</a>
+            {% endif %}
+            {% if perms.ventas.view_clientes %}
+            <a class="collapse-item" href="{{clientes_url}}">Clientes</a>
             {% endif %}
             <a class="collapse-item" href="{{listaoperaciones_url}}">Movimientos</a> 
       

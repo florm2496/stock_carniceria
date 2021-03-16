@@ -19,19 +19,21 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="row">
-                        <div class="col-10">
-                            <div class="input-group">
-                                <label for="cant_animales">Cantidad de animales</label>
+                        <div class="col-9" >
+                            
+                            <div style="margin: 5px;" class="input-group">
+                               <label for="cant_animales" name="cant_animales">Cantidad de animales</label>
+                             
                             </div>
-                            <div class="input-group">
-                               
-                               {{form.cant_animales}}
+                            {{form.cant_animales}}
 
-                            </div>
-                           
                         </div>
-                 
-                      
+
+                  <div class="col-3">
+                      <label for="id_estado" name="estado">Estado</label>
+                    {{form.estado}}
+    
+                </div>
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="row">

@@ -10,7 +10,7 @@ BASE_DIR=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG=True
 
-ALLOWED_HOSTS=[]
+ALLOWED_HOSTS=['*']
 
 
 SECRET_KEY = config('SECRET_KEY')
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'applications.apis',
     'applications.reses',
     'applications.caja',
+    'applications.carne',
     'django_userforeignkey'
    
     

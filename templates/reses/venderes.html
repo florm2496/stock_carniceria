@@ -18,53 +18,89 @@
                         {% if obj %} Editar {% else %} Nueva {% endif %} Venta de res
                     </div>
                     <div class="dropdown-divider"></div>
-                    {% csrf_token %}
-<div class="row">
-    <div class="col-6">
-        <label for="id_res">Media res</label>
-        <select name="res" id="id_res" required class="form-control">
+                  
+<div class="row justify-content-between">
+    
+    <div class="col-4" style="margin-top: 10px;">
+        <label for="id_medio_pago "  style="margin-top: 10px;">Medio de pago</label>
+        
+        {% if obj %}
+        <select name="medio_pago" id="id_medio_pago"  style="margin-top: 10px;" class="form-control">
+    <option value="{{obj.medio_pago}}">{{obj.medio_pago}}</option>
+        </select>
+            {% else %}
+            {{form.medio_pago}}
+        {% endif %}
             
+      
+      
+    </div>
+
+    <div class="col-4"  >
+        <label for="id_res" style="margin-bottom: 20px;">Media res</label>
+        
+        <select name="res" id="id_res" required  style="margin-bottom: 20px;" class="form-control">
+            
+            {% if obj %}
+            <option value="{{obj.res.id}}" >{{obj.res}}</option>
+                {% else %}  
+                     
             {% for item in reses %}
             <option value="{{item.id}}" >{{item}}</option>
-            {% endfor %}   </select>
+            {% endfor %}  
+            
+            {% endif %}
+        </select>
     </div>
-   <div  class="col-6">
-       <label for="id_cliente">Cliente</label>
-    <select id="id_cliente" name="cliente" required class="form-control">
-        {% for item in clientes %}
-        <option value="{{item.id}}">{{item}}</option>
-        {% endfor %}   
-    </select>
-</div>
+
+
+
+    
+   </div>
+   <div class="dropdown-divider"></div>
+<div class="row justify-content-between" >
+ 
+      
    <div class="col-6">   
-    <label for="id_precio">Precio</label>
-    <input type="number" id="id_precio" required name="precio"  class="form-control">
+   
+    <label for="id_precio" style="margin-top: 20px;">Precio</label>
+    <input type="text" id="id_precio" required name="precio"  class="form-control" value="{% if obj %}{{obj.precio}}{% endif %}">
  
 </div>
-<div  class="col-6">
-    <label for="id_medio_pago" >Medio de pago</label>
-    {{form.medio_pago}}
+    <div  class="col-6">
+        <label for="id_cliente">Cliente</label>
+     <select id="id_cliente" name="cliente" required class="form-control">
+         
+         {% if obj %}
+         <option value="{{obj.cliente.id}}">{{obj.cliente}}</option>
+         {% else %}
+         {% for item in clientes %}
+         <option value="{{item.id}}">{{item}}</option>
+         {% endfor %}   
+         {% endif %}
+             
+      
+     </select>
+    </div>
 </div>
-
+<div class="row">
+    
 {% if obj %}
     
 <div>
-    <label for="id_estado" >Estado</label>
+    <label for="id_estado" >Dar de baja venta</label>
     {{form.estado}}
 </div>
 
 {% endif %}
     
-
-    
-   </div>
-
+</div>
 
                     <div class="dropdown-divider"></div>
                     <div class="row">
                         <div class="col">
                             <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
-                            <a href="" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                            <a href="{% url 'reses:listaresesvendidas' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
                         </div>
                     </div>
                 </div>

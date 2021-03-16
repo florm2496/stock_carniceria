@@ -23,7 +23,7 @@ TIPO_CLIENTE=[
 
 class Cliente(ClaseModelo):
     nombre = models.CharField(max_length=50, default='casual')
-    tipo = models.CharField(max_length=15, choices=TIPO_CLIENTE,default=NAT )
+    tipo = models.CharField(max_length=15, choices=TIPO_CLIENTE ,blank=True , null=True )
     saldo=models.FloatField(default=0)
     numero = models.CharField(blank=True,null=True, max_length=50)
     email = models.CharField(blank=True,null=True, max_length=50)

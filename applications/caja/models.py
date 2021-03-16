@@ -23,11 +23,16 @@ class Caja(ClaseModelo2):
     def __str__(self):
         return str(self.monto_actual)
 
+class Concepto(ClaseModelo2):
+    nombre=models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.nombre
 
 class MovimientosCaja(ClaseModelo2):
     monto=models.FloatField(default=0)
     movimiento=models.CharField(max_length=20 , choices=tipo_movimiento,default='EGRESO')
+    concepto = models.ForeignKey(Concepto, on_delete=models.CASCADE ,blank=True,null=True)
     observacion = models.CharField(max_length=50)
     #caja=models.ForeignKey(Caja , on_delete=models.CASCADE ,default=0)
 

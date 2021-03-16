@@ -5,7 +5,7 @@ from .models import Cliente
 class ClienteForm(forms.ModelForm):
     class Meta:
         model=Cliente
-        fields=['nombre','tipo',
+        fields=['nombre',
             'numero','email','direccion','estado']
         exclude = ['um','fm','fc']
         

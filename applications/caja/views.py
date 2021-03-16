@@ -30,10 +30,13 @@ class ListaOperacionesListView(ListView):
         monto_actual=caja.monto_actual
 
         movimientos=MovimientosCaja.objects.all()
-
+        conceptos=Concepto.objects.all()
+        print(conceptos)
         print(monto_actual)
         context = {'montoactual':monto_actual,
-                   'movimientos':movimientos, }
+                   'movimientos':movimientos,
+                   'conceptos':conceptos,
+                    }
         return context
 
     #monto inicial a la hora de apertura

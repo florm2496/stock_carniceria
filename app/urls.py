@@ -27,6 +27,7 @@ urlpatterns = [
     path('apis/',include(('applications.apis.urls' ,'apis'),namespace='apis')),
     path('reses/',include(('applications.reses.urls' ,'reses'),namespace='reses')),
     path('caja/',include(('applications.caja.urls' ,'caja'),namespace='caja')),
+    path('carne/',include(('applications.carne.urls' ,'carne'),namespace='carne')),
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

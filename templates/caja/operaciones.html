@@ -45,6 +45,16 @@
     
     </div>
     <div class="col-10">
+        <div class="input-group">
+            {{form.concepto.label}}
+        {{form.concepto}}
+
+
+        </div>
+       
+    
+    </div>
+    <div class="col-10">
         <div class="input-group ">
             <input type="text" name="observacion" maxlength="100" class="form-control m-1" required id="id_observacion" placeholder="Observacion"
             value="{% if obj %} {{ obj.observacion}} {% endif %}">

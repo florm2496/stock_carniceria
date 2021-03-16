@@ -7,21 +7,19 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">LISTADO DE CLIENTES</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">DETALLE DE VENTAS</h6>
                   <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      
-                    </a>
+                
                  
                   </div>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                 
+                
                  {% if not obj %}
-                     No hay cliente
+                     No hay registro de ventas
                  {% endif %}
-                 <div class="buttons-toolbar"> <a class="dropdown-item" href="#" onclick="return abrir_modal('{% url 'ventas:cliente_new' %}')"><i class="far fa-calendar-plus"></i>Nueva</a></div>
+                 <div class="buttons-toolbar"> <a class="btn btn-success"  href="{% url 'reses:listareses' %}" ><i class="fas fa-undo-alt" style="margin-right: 3px;"></i>Volver</a></div>
                  <table data-toggle="table"
                  id="table"
 
@@ -60,11 +58,10 @@
         <td>{{item.estado}}</td>
        
         </td> 
-    <td>
-      <button type="submit" class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'ventas:cliente_edit' item.id %}')"><i class="far fa-edit"></i></button>
- 
+        <td>
+          <a href="{% url 'reses:vendereseditar' item.id %}" class="btn btn-warning btn-circle " role="button" ><i class="far fa-edit"></i></a>
          
-        </td>
+      </td>
        </tr>  
        {% endfor %}
     
